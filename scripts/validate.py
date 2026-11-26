@@ -37,6 +37,26 @@ SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+# v1 closing sweep (issue #10): size budget, hygiene, and content bars.
+SIZE_BUDGET_BYTES = 30720
+BUDGET_FILES = ("index.html", "assets/styles.css", "assets/app.js")
+LAYOUT_FILES = (
+    "index.html",
+    "assets/styles.css",
+    "assets/app.js",
+    "assets/favicon.svg",
+    "404.html",
+    "robots.txt",
+)
+FORBIDDEN_PATTERNS = ("googletag", "analytics", "document.cookie")
+REQUIRED_INDEX_STRINGS = ("TODO:", "I'm", "mailto:")
+REQUIRED_CSS_STRINGS = (
+    "max-width: 40rem",
+    "clamp(3rem, 1.8rem + 6vw, 4.6rem)",
+    "prefers-color-scheme",
+)
+FORBIDDEN_HOSTS = ("fonts.googleapis.com", "fonts.gstatic.com")
+
 
 def is_local_ref(value):
     """Return True if an href/src value points at a local file."""
@@ -163,13 +183,83 @@ def check_file(html_file, repo_root):
 
 def main():
     repo_root = REPO_ROOT
+    failures = []
+    for rel in LAYOUT_FILES:
+        if not (repo_root / rel).exists():
+            failures.append("layout: required file %s is missing" % rel)
+    budget_total = 0
+    for rel in BUDGET_FILES:
+        target = repo_root / rel
+        if target.exists():
+            budget_total += target.stat().st_size
+    if budget_total > SIZE_BUDGET_BYTES:
+        failures.append(
+            "budget: index.html + assets/styles.css + assets/app.js total %d bytes exceeds %d bytes"
+            % (budget_total, SIZE_BUDGET_BYTES)
+        )
+    index_file = repo_root / "index.html"
+    if index_file.exists():
+        index_text = index_file.read_text(encoding="utf-8")
+        for required in REQUIRED_INDEX_STRINGS:
+            if required not in index_text:
+                failures.append(
+                    "content: index.html is missing required string %r" % required
+                )
+    css_file = repo_root / "assets" / "styles.css"
+    if css_file.exists():
+        css_text = css_file.read_text(encoding="utf-8")
+        for required in REQUIRED_CSS_STRINGS:
+            if required not in css_text:
+                failures.append(
+                    "content: assets/styles.css is missing required string %r" % required
+                )
+    scan_targets = sorted(repo_root.glob("*.html"))
+    assets_dir = repo_root / "assets"
+    if assets_dir.is_dir():
+        scan_targets.extend(
+            sorted(
+                p
+                for p in assets_dir.rglob("*")
+                if p.is_file() and p.suffix in (".html", ".css", ".js", ".svg")
+            )
+        )
+    for target in scan_targets:
+        if not target.exists():
+            continue
+        try:
+            text = target.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        try:
+            shown = target.relative_to(repo_root)
+        except ValueError:
+            shown = target
+        for forbidden in FORBIDDEN_PATTERNS:
+            if forbidden in text:
+                failures.append(
+                    "%s: forbidden pattern %r found (no trackers/cookies)"
+                    % (shown, forbidden)
+                )
+        for host in FORBIDDEN_HOSTS:
+            if host in text:
+                failures.append(
+                    "%s: forbidden third-party host %r found" % (shown, host)
+                )
     html_files = sorted(repo_root.glob("*.html"))
     if not html_files:
         print("validate: no *.html files found at repo root")
         return 1
-    failures = []
     for html_file in html_files:
         failures.extend(check_file(html_file, repo_root))
+    raw_ref_re = re.compile(r'(?:href|src)\s*=\s*["\']([^"\']*)["\']', re.IGNORECASE)
+    for html_file in html_files:
+        text = html_file.read_text(encoding="utf-8")
+        for raw in raw_ref_re.findall(text):
+            if raw.strip().startswith("/"):
+                failures.append(
+                    "%s: absolute local path %r must be relative for subpath support"
+                    % (html_file.name, raw)
+                )
     if failures:
         for line in failures:
             print(line)

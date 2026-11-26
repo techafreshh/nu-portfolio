@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
 <script>
-  // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query applies the OS theme — hence no flash.
+  // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
   try {
     var saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") {

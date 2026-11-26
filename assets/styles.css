@@ -4,7 +4,7 @@
   --bg: #ffffff;
   --ink: #111111;
   --ink-soft: #555555;
-  --ink-faint: #9a9a9a;
+  --ink-faint: #767676;
   --rule: #eeeeee;
   --rule-strong: #d4d4d4;
   --accent: #2456d6;
@@ -53,6 +53,7 @@ a { color: inherit; text-decoration: none; }
   transition: color .2s, text-decoration-color .2s;
 }
 .link:hover { color: var(--accent); text-decoration-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .shell {
   max-width: var(--measure);
   margin: 0 auto;

@@ -35,6 +35,10 @@ VOID_ELEMENTS = frozenset(
 # a scheme — so external/placeholder refs can be skipped.
 SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
 
+# Matches CSS url(...) values with optional quotes/whitespace, so local
+# @font-face targets can be existence-checked like HTML href/src refs.
+CSS_URL_RE = re.compile(r"url\(\s*['\"]?([^'\")\s]+)['\"]?\s*\)")
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # v1 closing sweep (issue #10): size budget, hygiene, and content bars.
@@ -181,6 +185,29 @@ def check_file(html_file, repo_root):
     return failures
 
 
+def check_css_file(css_file, repo_root):
+    """Validate url(...) targets in one CSS file; return failure lines."""
+    text = css_file.read_text(encoding="utf-8")
+    failures = []
+    for raw in CSS_URL_RE.findall(text):
+        if not is_local_ref(raw):
+            continue
+        ref = strip_suffix(raw)
+        if not ref:
+            continue
+        target = resolve_ref(ref, css_file, repo_root)
+        if not target.exists():
+            try:
+                shown = target.relative_to(repo_root)
+            except ValueError:
+                shown = target
+            failures.append(
+                "%s: missing local reference %r -> %s does not exist"
+                % (css_file.name, raw, shown)
+            )
+    return failures
+
+
 def main():
     repo_root = REPO_ROOT
     failures = []
@@ -251,6 +278,9 @@ def main():
         return 1
     for html_file in html_files:
         failures.extend(check_file(html_file, repo_root))
+    css_files = sorted(repo_root.rglob("*.css"))
+    for css_path in css_files:
+        failures.extend(check_css_file(css_path, repo_root))
     raw_ref_re = re.compile(r'(?:href|src)\s*=\s*["\']([^"\']*)["\']', re.IGNORECASE)
     for html_file in html_files:
         text = html_file.read_text(encoding="utf-8")

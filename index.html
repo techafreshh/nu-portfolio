@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  ============================================================
+  EDIT ME — your details live here, everything else is styling.
+  1. Replace NAME, BIO, ENTRIES, and LINKS below.
+  2. Keep the one-word section labels ("Said", "Built") or rename.
+  ============================================================
+-->
+<title>Your Name</title>
+<meta name="description" content="Your Name — I build software, and I read a lot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --bg: #ffffff;
+    --ink: #111111;
+    --ink-soft: #555555;
+    --ink-faint: #9a9a9a;
+    --rule: #eeeeee;
+    --rule-strong: #d4d4d4;
+    --accent: #2456d6;
+    --measure: 40rem;
+    --gap-section: clamp(3rem, 8vw, 4.5rem);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d0d0d;
+      --ink: #ededed;
+      --ink-soft: #b5b5b5;
+      --ink-faint: #8f8f8f;
+      --rule: #2a2a2a;
+      --rule-strong: #3d3d3d;
+      --accent: #7aa2ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0d0d;
+    --ink: #ededed;
+    --ink-soft: #b5b5b5;
+    --ink-faint: #8f8f8f;
+    --rule: #2a2a2a;
+    --rule-strong: #3d3d3d;
+    --accent: #7aa2ff;
+  }
+  *, ::after, ::before { box-sizing: border-box; }
+  * { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+    transition: background-color .35s, color .35s;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  .link {
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: color .2s, text-decoration-color .2s;
+  }
+  .link:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .shell {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 5vw, 2rem) 6rem;
+  }
+  .hero { margin-bottom: var(--gap-section); }
+  .im { font-size: 1.05rem; color: var(--ink-faint); }
+  .name {
+    font-size: clamp(3rem, 1.8rem + 6vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0.1em 0 0.55em;
+  }
+  .scramble { font-variant-ligatures: none; }
+  .bio p + p { margin-top: 1em; }
+  .bio a { text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  .bio a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .section { margin-bottom: var(--gap-section); }
+  .section-label { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 1.4rem; }
+  .entries { list-style: none; padding: 0; }
+  .entry { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 0.35rem 0; }
+  .entry-title { font-size: 1.02rem; }
+  .entry-year { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); flex-shrink: 0; }
+  .entry-sub { display: block; font-size: 0.92rem; color: var(--ink-soft); margin-top: 0.1rem; }
+  .footer .footer-links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+  .footer-links a {
+    font-size: 1.02rem;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+    transition: color .2s, text-decoration-color .2s;
+  }
+  .footer-links a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .toggle-wrap { position: fixed; top: clamp(1.25rem, 4vw, 2rem); right: clamp(1.25rem, 4vw, 2rem); z-index: 10; }
+  .toggle {
+    width: 2.3rem; height: 2.3rem;
+    border: 1px solid var(--rule-strong, var(--rule));
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: inline-grid; place-items: center;
+    transition: color .25s, border-color .25s, transform .3s;
+  }
+  .toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .toggle:active { transform: scale(0.94); }
+  .toggle svg { width: 1rem; height: 1rem; }
+  @media (max-width: 34rem) {
+    .entry { flex-direction: column; gap: 0.1rem; }
+  }
+</style>
+<script>
+  // Restore saved theme before paint (avoids flash).
+  try {
+    var saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") {
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+  } catch (e) {}
+</script>
+</head>
+<body>
+<main class="shell">
+  <div class="toggle-wrap">
+    <button class="toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </div>
+
+  <section class="hero">
+    <p class="im">I&rsquo;m</p>
+    <!-- TODO: your first name (or full name) -->
+    <h1 class="name"><span class="scramble" id="name">Your Name</span></h1>
+    <div class="bio">
+      <!-- TODO: 2–3 sentences, same plain voice as the reference -->
+      <p>I build software, and I read a lot.</p>
+      <p>Work has taken me through a few industries &mdash; say where. What hasn&rsquo;t changed is the habit: take the thing apart, understand it properly, put it back together better.</p>
+      <p>I write about the stuff that sticks with me &mdash; say what: technology, design, faith, the mind.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <!-- TODO: rename to "Writing", "Essays", etc. if you prefer -->
+    <h2 class="section-label">Said</h2>
+    <ul class="entries">
+      <!-- TODO: replace with your essays. Keep newest first. -->
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">An essay title goes here</a><span class="entry-year">2026</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Another essay title goes here</a><span class="entry-year">2026</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Why this question won&rsquo;t leave you alone</a><span class="entry-year">2025</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Notes on building things that last</a><span class="entry-year">2025</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">What you&rsquo;re reading right now</a><span class="entry-year">2024</span></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <!-- TODO: rename to "Work", "Projects", etc. if you prefer -->
+    <h2 class="section-label">Built</h2>
+    <ul class="entries">
+      <!-- TODO: replace with your projects. Optional stack/role under each. -->
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Project One<span class="entry-sub">One line: what it does &middot; your role</span></a><span class="entry-year">2026</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Project Two<span class="entry-sub">One line: what it does &middot; your role</span></a><span class="entry-year">2025</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Project Three<span class="entry-sub">One line: what it does &middot; your role</span></a><span class="entry-year">2024</span></li>
+      <li class="entry"><a class="entry-title link" href="#" target="_blank" rel="noopener noreferrer">Project Four<span class="entry-sub">One line: what it does &middot; your role</span></a><span class="entry-year">2023</span></li>
+    </ul>
+  </section>
+
+  <footer class="footer">
+    <h2 class="section-label">Find me</h2>
+    <nav class="footer-links" aria-label="Elsewhere">
+      <!-- TODO: put your real links here. Delete any you don't use. -->
+      <a href="mailto:you@example.com">Email</a>
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://substack.com/" target="_blank" rel="noopener noreferrer">Substack</a>
+      <a href="https://x.com/" target="_blank" rel="noopener noreferrer">X</a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </footer>
+</main>
+
+<script>
+  // --- Theme toggle: manual choice wins, otherwise follow the OS. ---
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var moon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    var sun = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>';
+    function current() {
+      var saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (e) {}
+      if (saved === "light" || saved === "dark") return saved;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function paint() { btn.innerHTML = current() === "dark" ? sun : moon; }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      paint();
+    });
+    paint();
+  })();
+
+  // --- Name scramble on first paint (subtle, like the reference). ---
+  (function () {
+    var el = document.getElementById("name");
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var final = el.textContent;
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var start = null, duration = 650;
+    function frame(t) {
+      if (!start) start = t;
+      var p = Math.min((t - start) / duration, 1);
+      var reveal = Math.floor(p * final.length);
+      var out = final.slice(0, reveal);
+      for (var i = reveal; i < final.length; i++) {
+        out += final[i] === " " ? " " : chars[Math.floor(Math.random() * chars.length)];
+      }
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = final;
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>

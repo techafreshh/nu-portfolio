@@ -19,9 +19,11 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0d0d">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/styles.css">
 <script>
-  // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
+  // Pre-paint flags, run before the stylesheet so there is no flash: mark JS for the Built collapse; saved localStorage "theme" wins, otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme.
+  try {
+    document.documentElement.setAttribute("data-js", "");
+  } catch (e) {}
   try {
     var saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") {
@@ -29,6 +31,7 @@
     }
   } catch (e) {}
 </script>
+<link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 <main class="shell">
@@ -68,7 +71,7 @@
   <section class="section">
     <!-- TODO: rename to "Work", "Projects", etc. if you prefer -->
     <h2 class="section-label">Built</h2>
-    <ul class="entries">
+<ul class="entries" id="built-list">
       <!-- BUILT:START -->
       <li class="entry"><a class="entry-title link" href="built/aura/">Aura<span class="entry-sub">Real-time voice AI interviewer (LiveKit + Deepgram + TTS, PydanticAI evaluators) with anti-cheat trust monitor + full observability</span></a></li>
       <li class="entry"><a class="entry-title link" href="built/pi-dark-factory/">pi-dark-factory<span class="entry-sub">Autonomous software factory: PRD → backlog → unattended builds, deterministic verify gates, 5 cloud drivers, merge queue, ~35K LOC</span></a></li>
@@ -94,6 +97,7 @@
       <li class="entry"><a class="entry-title link" href="built/techa-dl-bot/">techa_dl_bot<span class="entry-sub">Telegram downloader with Local Bot API + async queue</span></a></li>
       <!-- BUILT:END -->
     </ul>
+    <p class="show-more-wrap"><button type="button" id="show-more" class="show-more link">Show more</button></p>
     <!-- TODO: keep as the empty-state line if you remove all entries above. -->
     <p class="empty">Nothing published yet.</p>
   </section>

@@ -115,6 +115,37 @@ a { color: inherit; text-decoration: none; }
 .entry-title { font-size: 1.02rem; min-width: 0; overflow-wrap: break-word; }
 .entry-year { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); flex-shrink: 0; }
 .entry-sub { display: block; font-size: 0.92rem; color: var(--ink-soft); margin-top: 0.1rem; }
+/* Built progressive reveal: no-JS shows all 22 and hides the control. */
+html:not([data-js]) .show-more-wrap { display: none; }
+html[data-js] #built-list > li:nth-child(n+6) { display: none; }
+html[data-js] #built-list > li.is-shown { display: flex; }
+.show-more-wrap { padding: 0.35rem 0; }
+.show-more {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+/* Ink curtain handoff for Built links. */
+.ink-curtain {
+  position: fixed;
+  inset: 0;
+  background: var(--ink);
+  transform: translateY(100%);
+  transition: transform 450ms ease;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.25rem;
+}
+.ink-curtain.is-cover { transform: translateY(0); }
+.ink-curtain__label { color: var(--bg); }
+@media (prefers-reduced-motion: reduce) {
+  .ink-curtain { display: none; }
+}
 .footer .footer-links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
 .footer-links a {
   font-size: 1.02rem;

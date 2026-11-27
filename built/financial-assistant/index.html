@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>financial-assistant — Your Name</title>
+<meta name="description" content="Code-Act pandas agent + 12-kind generative-UI contract">
+<meta property="og:title" content="financial-assistant — Your Name">
+<meta property="og:description" content="Code-Act pandas agent + 12-kind generative-UI contract">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0d0d">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/styles.css">
+<style>
+  .back { margin-bottom: 1.6rem; }
+  .tagline { color: var(--ink-soft); margin-bottom: 1rem; }
+  .meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1.4rem; }
+  .project-links { margin-bottom: 0.5rem; }
+  .shots { display: grid; gap: 1rem; margin: 2rem 0; }
+  .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
+  .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+</style>
+<script>
+  // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
+  try {
+    var saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") {
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+  } catch (e) {}
+</script>
+</head>
+<body>
+<main class="shell">
+  <div class="toggle-wrap">
+    <button class="toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </div>
+
+  <p class="back"><a class="link" href="../../">← Built</a></p>
+  <h1 class="name">financial-assistant</h1>
+  <p class="tagline">Code-Act pandas agent + 12-kind generative-UI contract</p>
+  <p class="meta"><!-- TODO: add the year for financial-assistant when known. --></p>
+  <nav class="footer-links project-links" aria-label="Project links">
+    <a href="#">Live ↗</a>
+    <!-- TODO: replace the Live placeholder for financial-assistant with the real URL. -->
+  </nav>
+  <div class="shots">
+    <!-- TODO: replace with a real screenshot of financial-assistant. -->
+    <img src="../../assets/img/placeholder.svg" alt="financial-assistant screenshot — replace with a real screenshot">
+    <!-- TODO: replace with a real screenshot of financial-assistant. -->
+    <img src="../../assets/img/placeholder.svg" alt="financial-assistant screenshot — replace with a real screenshot">
+  </div>
+  <h2>The build</h2>
+  <!-- TODO: describe how financial-assistant was built. -->
+  <p>Build notes coming soon.</p>
+  <!-- TODO: describe what financial-assistant does differently and what is next. -->
+  <p>More detail coming soon.</p>
+  <nav class="pager" aria-label="More projects">
+    <a class="link" href="../magpie/">← Previous · magpie</a>
+    <a class="link" href="../yt-clipping/">Next → · yt-clipping</a>
+  </nav>
+</main>
+
+<script src="../../assets/app.js" defer></script>
+</body>
+</html>

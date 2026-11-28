@@ -471,10 +471,16 @@ def main():
                     "budget: built/%s/index.html + shared CSS/JS total %d bytes exceeds %d bytes"
                     % (slug, page_total, SIZE_BUDGET_BYTES)
                 )
+    # The style.css compat alias was removed on main as an unreferenced
+    # duplicate (b3e5ed1); the canonical budget file is styles.css, which
+    # every page references relatively. Only lock byte-identity when the
+    # alias exists so the check passes with or without it.
     alias_file = repo_root / "assets" / "style.css"
-    if not alias_file.exists():
-        failures.append("budget: assets/style.css alias is missing")
-    elif styles_file.exists() and alias_file.read_bytes() != styles_file.read_bytes():
+    if (
+        alias_file.exists()
+        and styles_file.exists()
+        and alias_file.read_bytes() != styles_file.read_bytes()
+    ):
         failures.append(
             "budget: assets/style.css differs from assets/styles.css "
             "(alias must be byte-identical)"

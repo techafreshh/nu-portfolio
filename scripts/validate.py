@@ -1,11 +1,17 @@
-"""Validate HTML tag balance and local href/src references.
+"""Validate HTML tag balance, local refs, and the v2 project contract.
 
-Walks every ``*.html`` file at the repo root, checks that tags are
-balanced, and checks that every local ``href``/``src`` target exists
-on disk. External URLs, fragments, and empty refs are skipped.
+Checks every ``*.html`` file at the repo root plus every
+``built/*/index.html`` page: tags must balance, local ``href``/``src``
+targets must exist, and absolute local paths are rejected. Per-page
+checks derived from ``assets/data/projects.json`` lock the link rules
+(public GitHub URL verbatim in the links row, no ``github.com`` for
+private repos), the ``Live`` placeholder, About coverage, wrap-around
+prev/next order, the per-page byte budget, and local-only scripts.
 Exits non-zero on any failure so CI can fail the build.
 """
 
+import html
+import json
 import re
 import sys
 from html.parser import HTMLParser
@@ -52,7 +58,15 @@ LAYOUT_FILES = (
     "404.html",
     "robots.txt",
 )
-FORBIDDEN_PATTERNS = ("googletag", "analytics", "document.cookie")
+FORBIDDEN_PATTERNS = (
+    "googletag",
+    "analytics",
+    "document.cookie",
+    "Project One",
+    "Project Two",
+    "Project Three",
+    "Project Four",
+)
 REQUIRED_INDEX_STRINGS = ("TODO:", "I'm", "mailto:")
 REQUIRED_CSS_STRINGS = (
     "max-width: 40rem",
@@ -60,6 +74,21 @@ REQUIRED_CSS_STRINGS = (
     "prefers-color-scheme",
 )
 FORBIDDEN_HOSTS = ("fonts.googleapis.com", "fonts.gstatic.com")
+
+# v2 final sweep (issue #32): json-driven per-page contract bars.
+EXPECTED_PROJECT_COUNT = 22
+LIVE_LINK_HTML = '<a href="#">Live \u2197</a>'
+PREV_LABEL = "\u2190 Previous"
+NEXT_LABEL = "Next \u2192"
+H1_RE = re.compile(r"<h1[^>]*>(.*?)</h1>", re.IGNORECASE | re.DOTALL)
+PROJECT_LINKS_RE = re.compile(
+    r'<nav[^>]*class="[^"]*project-links[^"]*"[^>]*>(.*?)</nav>',
+    re.IGNORECASE | re.DOTALL,
+)
+SCRIPT_SRC_RE = re.compile(
+    r"<script\b[^>]*\bsrc\s*=\s*[\"']([^\"']*)[\"']", re.IGNORECASE
+)
+BUILT_HREF_RE = re.compile(r'href="built/([^"/]+)/"')
 
 
 def is_local_ref(value):
@@ -224,7 +253,35 @@ def main():
             "budget: index.html + assets/styles.css + assets/app.js total %d bytes exceeds %d bytes"
             % (budget_total, SIZE_BUDGET_BYTES)
         )
+    projects_file = repo_root / "assets" / "data" / "projects.json"
+    projects = []
+    try:
+        projects_text = projects_file.read_text(encoding="utf-8")
+    except OSError as exc:
+        failures.append("page: cannot read assets/data/projects.json: %s" % exc)
+    else:
+        try:
+            projects_data = json.loads(projects_text)
+        except json.JSONDecodeError as exc:
+            failures.append(
+                "page: invalid JSON in assets/data/projects.json: %s" % exc
+            )
+        else:
+            listed = (
+                projects_data.get("projects")
+                if isinstance(projects_data, dict)
+                else None
+            )
+            if not isinstance(listed, list) or len(listed) != EXPECTED_PROJECT_COUNT:
+                found = len(listed) if isinstance(listed, list) else 0
+                failures.append(
+                    "page: assets/data/projects.json must hold %d projects, found %d"
+                    % (EXPECTED_PROJECT_COUNT, found)
+                )
+            else:
+                projects = listed
     index_file = repo_root / "index.html"
+    index_text = ""
     if index_file.exists():
         index_text = index_file.read_text(encoding="utf-8")
         for required in REQUIRED_INDEX_STRINGS:
@@ -240,7 +297,13 @@ def main():
                 failures.append(
                     "content: assets/styles.css is missing required string %r" % required
                 )
-    scan_targets = sorted(repo_root.glob("*.html"))
+    html_files = sorted(repo_root.glob("*.html"))
+    built_dir = repo_root / "built"
+    if built_dir.is_dir():
+        html_files.extend(
+            sorted(p for p in built_dir.rglob("*.html") if p.is_file())
+        )
+    scan_targets = list(html_files)
     assets_dir = repo_root / "assets"
     if assets_dir.is_dir():
         scan_targets.extend(
@@ -272,7 +335,6 @@ def main():
                 failures.append(
                     "%s: forbidden third-party host %r found" % (shown, host)
                 )
-    html_files = sorted(repo_root.glob("*.html"))
     if not html_files:
         print("validate: no *.html files found at repo root")
         return 1
@@ -289,6 +351,146 @@ def main():
                 failures.append(
                     "%s: absolute local path %r must be relative for subpath support"
                     % (html_file.name, raw)
+                )
+    order = [
+        project.get("slug", "")
+        for project in projects
+        if isinstance(project, dict)
+    ]
+    total = len(projects)
+    for i, project in enumerate(projects):
+        if not isinstance(project, dict):
+            failures.append("page: project at index %d is not an object" % i)
+            continue
+        slug = project.get("slug", "")
+        name = project.get("name", "")
+        page = repo_root / "built" / slug / "index.html"
+        if not page.exists():
+            failures.append("page: built/%s/index.html is missing" % slug)
+            continue
+        text = page.read_text(encoding="utf-8")
+        heading = H1_RE.search(text)
+        if heading is None or html.escape(name, quote=False) not in heading.group(1):
+            failures.append(
+                "page: built/%s/index.html is missing <h1> with the project name"
+                % slug
+            )
+        tagline = project.get("tagline", "")
+        if not tagline or html.escape(tagline, quote=False) not in text:
+            failures.append(
+                "page: built/%s/index.html is missing the project tagline" % slug
+            )
+        if "<h2>About</h2>" not in text:
+            failures.append(
+                "page: built/%s/index.html is missing <h2>About</h2>" % slug
+            )
+        about = project.get("about")
+        if isinstance(about, str) and about.strip():
+            if html.escape(about.strip(), quote=False) not in text:
+                failures.append(
+                    "page: built/%s/index.html is missing the About body" % slug
+                )
+        elif "TODO" not in text:
+            failures.append(
+                "page: built/%s/index.html is missing the About TODO" % slug
+            )
+        links = PROJECT_LINKS_RE.search(text)
+        if links is None:
+            failures.append(
+                "page: built/%s/index.html is missing the project-links nav" % slug
+            )
+        else:
+            block = links.group(1)
+            if LIVE_LINK_HTML not in block:
+                failures.append(
+                    "page: built/%s/index.html links row is missing the Live placeholder"
+                    % slug
+                )
+            if "TODO" not in block:
+                failures.append(
+                    "page: built/%s/index.html links row is missing the Live TODO"
+                    % slug
+                )
+            github = project.get("github")
+            if isinstance(github, str) and github:
+                if github not in block:
+                    failures.append(
+                        "page: built/%s/index.html links row is missing %r"
+                        % (slug, github)
+                    )
+            elif "github.com" in block:
+                failures.append(
+                    "page: built/%s/index.html links row must not link github.com (private repo)"
+                    % slug
+                )
+        prev_project = projects[(i - 1) % total]
+        next_project = projects[(i + 1) % total]
+        prev_slug = prev_project.get("slug", "") if isinstance(prev_project, dict) else ""
+        next_slug = next_project.get("slug", "") if isinstance(next_project, dict) else ""
+        prev_name = prev_project.get("name", "") if isinstance(prev_project, dict) else ""
+        next_name = next_project.get("name", "") if isinstance(next_project, dict) else ""
+        if (
+            "../%s/" % prev_slug not in text
+            or PREV_LABEL not in text
+            or html.escape(prev_name, quote=False) not in text
+        ):
+            failures.append(
+                "page: built/%s/index.html has the wrong previous link (want ../%s/)"
+                % (slug, prev_slug)
+            )
+        if (
+            "../%s/" % next_slug not in text
+            or NEXT_LABEL not in text
+            or html.escape(next_name, quote=False) not in text
+        ):
+            failures.append(
+                "page: built/%s/index.html has the wrong next link (want ../%s/)"
+                % (slug, next_slug)
+            )
+    if index_file.exists() and order:
+        built_hrefs = BUILT_HREF_RE.findall(index_text)
+        if built_hrefs != order:
+            failures.append(
+                "content: index.html Built entries are out of order "
+                "(want data order from assets/data/projects.json)"
+            )
+    styles_file = repo_root / "assets" / "styles.css"
+    app_file = repo_root / "assets" / "app.js"
+    shared_bytes = 0
+    for shared in (styles_file, app_file):
+        if shared.exists():
+            shared_bytes += shared.stat().st_size
+    for slug in order:
+        if not slug:
+            continue
+        page = repo_root / "built" / slug / "index.html"
+        if page.exists():
+            page_total = page.stat().st_size + shared_bytes
+            if page_total > SIZE_BUDGET_BYTES:
+                failures.append(
+                    "budget: built/%s/index.html + shared CSS/JS total %d bytes exceeds %d bytes"
+                    % (slug, page_total, SIZE_BUDGET_BYTES)
+                )
+    alias_file = repo_root / "assets" / "style.css"
+    if not alias_file.exists():
+        failures.append("budget: assets/style.css alias is missing")
+    elif styles_file.exists() and alias_file.read_bytes() != styles_file.read_bytes():
+        failures.append(
+            "budget: assets/style.css differs from assets/styles.css "
+            "(alias must be byte-identical)"
+        )
+    for html_file in html_files:
+        text = html_file.read_text(encoding="utf-8")
+        for raw in SCRIPT_SRC_RE.findall(text):
+            value = raw.strip()
+            if SCHEME_RE.match(value) or value.startswith("//"):
+                try:
+                    shown = html_file.relative_to(repo_root)
+                except ValueError:
+                    shown = html_file
+                failures.append(
+                    "%s: third-party script src %r (only local scripts allowed)"
+                    % (shown, raw)
                 )
     if failures:
         for line in failures:

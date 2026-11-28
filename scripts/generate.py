@@ -62,9 +62,13 @@ PAGE_CSS = (
     "  .tagline { color: var(--ink-soft); margin-bottom: 1rem; }\n"
     "  .meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1.4rem; }\n"
     "  .project-links { margin-bottom: 0.5rem; }\n"
+    "  .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }\n"
+    "  .project-hero > * { min-width: 0; }\n"
+    "  .project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }\n"
     "  .shots { display: grid; gap: 1rem; margin: 2rem 0; }\n"
     "  .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }\n"
     "  .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }\n"
+    "  @media (max-width: 34rem) { .project-hero { grid-template-columns: 1fr; gap: 1rem; } }\n"
     "</style>"
 )
 
@@ -160,6 +164,17 @@ def render_page(project, prev_project, next_project):
     shots.append('    <img src="../../assets/img/placeholder.svg" alt="' + img_alt + '">')
     shots_html = "\n".join(shots)
 
+    about_raw = project.get("about")
+    if isinstance(about_raw, str) and about_raw.strip():
+        about_html = "  <p>" + html.escape(about_raw.strip(), quote=False) + "</p>"
+    else:
+        about_lines = []
+        about_lines.append("  <!-- TODO: write the About section for " + name_attr + ". -->")
+        about_lines.append("  <p>About notes coming soon.</p>")
+        about_lines.append("  <!-- TODO: describe what " + name_attr + " does differently and what is next. -->")
+        about_lines.append("  <p>More detail coming soon.</p>")
+        about_html = "\n".join(about_lines)
+
     parts = []
     parts.append("<!DOCTYPE html>")
     parts.append('<html lang="en">')
@@ -184,20 +199,21 @@ def render_page(project, prev_project, next_project):
     parts.append(TOGGLE_HTML)
     parts.append("")
     parts.append('  <p class="back"><a class="link" href="../../">\u2190 Built</a></p>')
-    parts.append('  <h1 class="name">' + name_text + "</h1>")
-    parts.append('  <p class="tagline">' + tag_text + "</p>")
-    parts.append('  <p class="meta">' + meta_inner + "</p>")
-    parts.append('  <nav class="footer-links project-links" aria-label="Project links">')
+    parts.append('  <header class="project-hero">')
+    parts.append('    <h1 class="name">' + name_text + "</h1>")
+    parts.append("    <div>")
+    parts.append('      <p class="tagline">' + tag_text + "</p>")
+    parts.append('      <p class="meta">' + meta_inner + "</p>")
+    parts.append('      <nav class="footer-links project-links" aria-label="Project links">')
     parts.append(links_html)
-    parts.append("  </nav>")
+    parts.append("      </nav>")
+    parts.append("    </div>")
+    parts.append("  </header>")
+    parts.append("  <h2>About</h2>")
+    parts.append(about_html)
     parts.append('  <div class="shots">')
     parts.append(shots_html)
     parts.append("  </div>")
-    parts.append("  <h2>The build</h2>")
-    parts.append("  <!-- TODO: describe how " + name_attr + " was built. -->")
-    parts.append("  <p>Build notes coming soon.</p>")
-    parts.append("  <!-- TODO: describe what " + name_attr + " does differently and what is next. -->")
-    parts.append("  <p>More detail coming soon.</p>")
     parts.append('  <nav class="pager" aria-label="More projects">')
     parts.append(
         '    <a class="link" href="../'

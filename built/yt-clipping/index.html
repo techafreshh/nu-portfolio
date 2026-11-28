@@ -18,9 +18,13 @@
   .tagline { color: var(--ink-soft); margin-bottom: 1rem; }
   .meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1.4rem; }
   .project-links { margin-bottom: 0.5rem; }
+  .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }
+  .project-hero > * { min-width: 0; }
+  .project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
   .shots { display: grid; gap: 1rem; margin: 2rem 0; }
   .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
   .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  @media (max-width: 34rem) { .project-hero { grid-template-columns: 1fr; gap: 1rem; } }
 </style>
 <script>
   // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
@@ -41,25 +45,26 @@
   </div>
 
   <p class="back"><a class="link" href="../../">← Built</a></p>
-  <h1 class="name">yt-clipping</h1>
-  <p class="tagline">Transcript → highlights → 9:16 vertical clips with word-level captions</p>
-  <p class="meta"><!-- TODO: add the year for yt-clipping when known. --></p>
-  <nav class="footer-links project-links" aria-label="Project links">
+  <header class="project-hero">
+    <h1 class="name">yt-clipping</h1>
+    <div>
+      <p class="tagline">Transcript → highlights → 9:16 vertical clips with word-level captions</p>
+      <p class="meta"><!-- TODO: add the year for yt-clipping when known. --></p>
+      <nav class="footer-links project-links" aria-label="Project links">
     <a href="#">Live ↗</a>
     <!-- TODO: replace the Live placeholder for yt-clipping with the real URL. -->
     <a href="https://github.com/techafreshh/yt-clipping" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-  </nav>
+      </nav>
+    </div>
+  </header>
+  <h2>About</h2>
+  <p>yt-clipping turns long transcripts into shareable moments. It finds the highlights, cuts them into 9:16 vertical clips, and burns word-level captions onto every one — so a clip is ready to post the moment it's cut.</p>
   <div class="shots">
     <!-- TODO: replace with a real screenshot of yt-clipping. -->
     <img src="../../assets/img/placeholder.svg" alt="yt-clipping screenshot — replace with a real screenshot">
     <!-- TODO: replace with a real screenshot of yt-clipping. -->
     <img src="../../assets/img/placeholder.svg" alt="yt-clipping screenshot — replace with a real screenshot">
   </div>
-  <h2>The build</h2>
-  <!-- TODO: describe how yt-clipping was built. -->
-  <p>Build notes coming soon.</p>
-  <!-- TODO: describe what yt-clipping does differently and what is next. -->
-  <p>More detail coming soon.</p>
   <nav class="pager" aria-label="More projects">
     <a class="link" href="../financial-assistant/">← Previous · financial-assistant</a>
     <a class="link" href="../arc-rag/">Next → · arc-rag</a>

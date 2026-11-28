@@ -18,9 +18,13 @@
   .tagline { color: var(--ink-soft); margin-bottom: 1rem; }
   .meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1.4rem; }
   .project-links { margin-bottom: 0.5rem; }
+  .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }
+  .project-hero > * { min-width: 0; }
+  .project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
   .shots { display: grid; gap: 1rem; margin: 2rem 0; }
   .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
   .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  @media (max-width: 34rem) { .project-hero { grid-template-columns: 1fr; gap: 1rem; } }
 </style>
 <script>
   // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
@@ -41,25 +45,26 @@
   </div>
 
   <p class="back"><a class="link" href="../../">← Built</a></p>
-  <h1 class="name">redline</h1>
-  <p class="tagline">IAM attack-path finder; paths computed never generated, self-verifying remediation on shadow graph</p>
-  <p class="meta"><!-- TODO: add the year for redline when known. --></p>
-  <nav class="footer-links project-links" aria-label="Project links">
+  <header class="project-hero">
+    <h1 class="name">redline</h1>
+    <div>
+      <p class="tagline">IAM attack-path finder; paths computed never generated, self-verifying remediation on shadow graph</p>
+      <p class="meta"><!-- TODO: add the year for redline when known. --></p>
+      <nav class="footer-links project-links" aria-label="Project links">
     <a href="#">Live ↗</a>
     <!-- TODO: replace the Live placeholder for redline with the real URL. -->
     <a href="https://github.com/techafreshh/redline" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-  </nav>
+      </nav>
+    </div>
+  </header>
+  <h2>About</h2>
+  <p>redline finds attack paths in IAM configurations. Paths are computed from the real permission graph, never generated or guessed, and every proposed remediation is self-verified against a shadow graph before it reaches you — so the fix you get is one that has already been proven safe.</p>
   <div class="shots">
     <!-- TODO: replace with a real screenshot of redline. -->
     <img src="../../assets/img/placeholder.svg" alt="redline screenshot — replace with a real screenshot">
     <!-- TODO: replace with a real screenshot of redline. -->
     <img src="../../assets/img/placeholder.svg" alt="redline screenshot — replace with a real screenshot">
   </div>
-  <h2>The build</h2>
-  <!-- TODO: describe how redline was built. -->
-  <p>Build notes coming soon.</p>
-  <!-- TODO: describe what redline does differently and what is next. -->
-  <p>More detail coming soon.</p>
   <nav class="pager" aria-label="More projects">
     <a class="link" href="../pi-dark-factory/">← Previous · pi-dark-factory</a>
     <a class="link" href="../digital-products-factory/">Next → · digital-products-factory</a>

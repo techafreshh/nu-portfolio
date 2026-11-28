@@ -175,7 +175,7 @@ html[data-js] #built-list > li.is-shown { display: flex; }
 /* Project pages: split hero (mirrors the inline PAGE_CSS in scripts/generate.py). */
 .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }
 .project-hero > * { min-width: 0; }
-.project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
+.project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
 @media (max-width: 34rem) {
   .project-hero { grid-template-columns: 1fr; gap: 1rem; }
 }

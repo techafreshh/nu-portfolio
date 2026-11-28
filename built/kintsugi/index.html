@@ -20,7 +20,7 @@
   .project-links { margin-bottom: 0.5rem; }
   .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }
   .project-hero > * { min-width: 0; }
-  .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
+  .project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
   .shots { display: grid; gap: 1rem; margin: 2rem 0; }
   .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
   .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
@@ -46,7 +46,7 @@
 
   <p class="back"><a class="link" href="../../">← Built</a></p>
   <header class="project-hero">
-    <h1 class="name project-name">kintsugi</h1>
+    <h1 class="name">kintsugi</h1>
     <div>
       <p class="tagline">n8n self-repair; LLM can only make outcomes more conservative</p>
       <p class="meta"><!-- TODO: add the year for kintsugi when known. --></p>

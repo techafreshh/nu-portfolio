@@ -64,7 +64,7 @@ PAGE_CSS = (
     "  .project-links { margin-bottom: 0.5rem; }\n"
     "  .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }\n"
     "  .project-hero > * { min-width: 0; }\n"
-    "  .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }\n"
+    "  .project-hero .name, .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }\n"
     "  .shots { display: grid; gap: 1rem; margin: 2rem 0; }\n"
     "  .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }\n"
     "  .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }\n"
@@ -200,7 +200,7 @@ def render_page(project, prev_project, next_project):
     parts.append("")
     parts.append('  <p class="back"><a class="link" href="../../">\u2190 Built</a></p>')
     parts.append('  <header class="project-hero">')
-    parts.append('    <h1 class="name project-name">' + name_text + "</h1>")
+    parts.append('    <h1 class="name">' + name_text + "</h1>")
     parts.append("    <div>")
     parts.append('      <p class="tagline">' + tag_text + "</p>")
     parts.append('      <p class="meta">' + meta_inner + "</p>")

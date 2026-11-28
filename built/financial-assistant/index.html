@@ -18,9 +18,13 @@
   .tagline { color: var(--ink-soft); margin-bottom: 1rem; }
   .meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1.4rem; }
   .project-links { margin-bottom: 0.5rem; }
+  .project-hero { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 2rem; align-items: center; }
+  .project-hero > * { min-width: 0; }
+  .project-name { font-size: clamp(2.4rem, 1.6rem + 4vw, 3.6rem); overflow-wrap: break-word; max-width: 100%; }
   .shots { display: grid; gap: 1rem; margin: 2rem 0; }
   .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
   .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  @media (max-width: 34rem) { .project-hero { grid-template-columns: 1fr; gap: 1rem; } }
 </style>
 <script>
   // Saved localStorage "theme" wins; otherwise the CSS prefers-color-scheme media query (tokens --bg/--accent in assets/styles.css) applies the OS theme — hence no flash.
@@ -41,24 +45,25 @@
   </div>
 
   <p class="back"><a class="link" href="../../">← Built</a></p>
-  <h1 class="name">financial-assistant</h1>
-  <p class="tagline">Code-Act pandas agent + 12-kind generative-UI contract</p>
-  <p class="meta"><!-- TODO: add the year for financial-assistant when known. --></p>
-  <nav class="footer-links project-links" aria-label="Project links">
+  <header class="project-hero">
+    <h1 class="name project-name">financial-assistant</h1>
+    <div>
+      <p class="tagline">Code-Act pandas agent + 12-kind generative-UI contract</p>
+      <p class="meta"><!-- TODO: add the year for financial-assistant when known. --></p>
+      <nav class="footer-links project-links" aria-label="Project links">
     <a href="#">Live ↗</a>
     <!-- TODO: replace the Live placeholder for financial-assistant with the real URL. -->
-  </nav>
+      </nav>
+    </div>
+  </header>
+  <h2>About</h2>
+  <p>financial-assistant is a Code-Act pandas agent behind a twelve-kind generative-UI contract. It computes with real dataframes instead of hallucinated numbers, and every answer renders through a fixed set of UI kinds so the interface stays predictable no matter what the model tries to do.</p>
   <div class="shots">
     <!-- TODO: replace with a real screenshot of financial-assistant. -->
     <img src="../../assets/img/placeholder.svg" alt="financial-assistant screenshot — replace with a real screenshot">
     <!-- TODO: replace with a real screenshot of financial-assistant. -->
     <img src="../../assets/img/placeholder.svg" alt="financial-assistant screenshot — replace with a real screenshot">
   </div>
-  <h2>The build</h2>
-  <!-- TODO: describe how financial-assistant was built. -->
-  <p>Build notes coming soon.</p>
-  <!-- TODO: describe what financial-assistant does differently and what is next. -->
-  <p>More detail coming soon.</p>
   <nav class="pager" aria-label="More projects">
     <a class="link" href="../magpie/">← Previous · magpie</a>
     <a class="link" href="../yt-clipping/">Next → · yt-clipping</a>

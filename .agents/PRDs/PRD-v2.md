@@ -27,7 +27,9 @@ markup. Runtime stays static, zero-build, and complete without JavaScript.
 
 - `assets/data/projects.json` is the single source of truth for Built entries
   and project pages: an ordered list of
-  `{slug, name, tagline, github, live, year}`.
+  `{slug, name, tagline, about, github, live, year}`. The `about` field is the
+  owner's detailed description; `null` falls back to two TODO placeholder
+  paragraphs.
 - `scripts/generate.py` (Python 3 stdlib only, run from the repo root)
   renders:
   - the Built `<ul>` between `<!-- BUILT:START -->` and `<!-- BUILT:END -->`
@@ -78,19 +80,26 @@ markup. Runtime stays static, zero-build, and complete without JavaScript.
   (`../../assets/...`) so subpath hosting works.
 - Same shell as home: tokens, Inter / JetBrains Mono, theme bootstrap + toggle
   for both themes, 40rem column. No name scramble.
+- **Split hero** on desktop: a two-column grid spanning the hero area — the
+  project name (`h1`) sits vertically centered in the left half, and the
+  details stack on the right half: the verbatim tagline (kicker), the meta
+  row (mono, year when present, omitted otherwise), and the links row (styled
+  like Find me: "Live ↗" for every project with a placeholder `href="#"` +
+  `TODO`; "GitHub ↗" only when `github` is set). The `h1` uses its own smaller
+  display clamp
+  (roughly `clamp(2.4rem, 1.6rem + 4vw, 3.6rem)`) so long names like
+  `digital-products-factory` wrap and fit; the column never scrolls
+  horizontally. Below the existing 34rem breakpoint the hero stacks: name
+  first, details beneath.
 - Layout, top to bottom:
   1. back link "← Built" → `../../`
-  2. `h1` with the project name, same display scale as the home name
-  3. the verbatim tagline in `--ink-soft`
-  4. meta row (mono): the year when present; omitted otherwise (`TODO`)
-  5. links row styled like Find me: "Live ↗" for every project (placeholder
-     `href="#"` + `TODO` until the owner provides URLs); "GitHub ↗" only when
-     `github` is set
-  6. picture band: two images using the shared `assets/img/placeholder.svg`,
+  2. split hero (name left / details right, per above)
+  3. "About" (`h2`) — the `about` field rendered as body text; when `about`
+     is `null`, two short `TODO` placeholder paragraphs instead
+  4. picture band: two images using the shared `assets/img/placeholder.svg`,
      each with `alt="<Name> screenshot — replace with a real screenshot"`, and
      `TODO` comments marking where real screenshots go
-  7. "The build" (`h2`) plus two short placeholder paragraphs, `TODO`-marked
-  8. prev/next navigation in `projects.json` order with wrap-around, labeled
+  5. prev/next navigation in `projects.json` order with wrap-around, labeled
      "← Previous" / "Next →" with the neighbor's name
 - `<head>`: title `<Name> — Your Name`, description = tagline; no canonical
   until the domain exists. `robots.txt` and `404.html` are unchanged.
@@ -116,8 +125,10 @@ Served from the repo root:
 2. With JavaScript off, all 22 entries are visible and linked; the control is
    hidden.
 3. `GET /built/<slug>/` returns 200 for all 22 slugs; each page contains its
-   `h1` name, the verbatim tagline, a Live placeholder link, and prev/next
-   neighbors that match the §7 order with wrap-around.
+   `h1` name, the verbatim tagline, the About body text where `about` is set,
+   a Live placeholder link, and prev/next neighbors that match the §7 order
+   with wrap-around. The hero renders as a two-column split on desktop and
+   stacks below 34rem.
 4. Public repos link to `https://github.com/techafreshh/<repo>`. Private repos
    contain no `github.com` link in their links row.
 5. `assets/app.js` implements the curtain; reduced-motion and no-JS paths
@@ -140,16 +151,11 @@ Relative asset paths everywhere. No client-side routing.
 
 ## 11. Slicing guidance
 
-- **Foundation issue:** the generator + page template + shared placeholder
-  image + all 22 pages emitted, and `index.html`'s Built list replaced with
-  the 22 real entries (all visible — no reveal, no curtain yet). The visible
-  change is that the list grows to 22; that is intended.
-- **Second issue (depends on the first):** progressive reveal (pre-paint
-  collapse, "Show more", no-JS parity) + the ink curtain + the page handoff.
-- Both issues touch `index.html`, `assets/styles.css`, and `assets/app.js`, so
-  they are sequential — no parallel lanes.
-- The existing runtime scenario must stay green at every step; probes for
-  `/built/<slug>/` are added by the operator after merge.
+This amendment ships as **one issue**: the split hero + About section on all
+22 pages (generator template + CSS) with the `about` fields already committed
+in `projects.json`. The "The build" section is replaced by About. The
+existing runtime scenario must stay green; new probes are added by the
+operator after merge.
 
 ## 12. Operator checklist (not factory issues)
 

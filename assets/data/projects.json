@@ -1,10 +1,11 @@
 {
-  "_readme": "Single source of truth for the Built section and project pages. Edit this file, run `python3 scripts/generate.py` from the repo root, and commit the output. null means: github -> no GitHub link rendered; live -> placeholder link marked TODO; year -> no year shown (TODO). Taglines are the owner's verbatim text.",
+  "_readme": "Single source of truth for the Built section and project pages. Edit this file, run `python3 scripts/generate.py` from the repo root, and commit the output. null means: github -> no GitHub link rendered; live -> placeholder link marked TODO; year -> no year shown (TODO); about -> two placeholder paragraphs marked TODO. Taglines are the owner's verbatim text; about is the owner's detailed description, editable at will.",
   "projects": [
     {
       "slug": "aura",
       "name": "Aura",
       "tagline": "Real-time voice AI interviewer (LiveKit + Deepgram + TTS, PydanticAI evaluators) with anti-cheat trust monitor + full observability",
+      "about": "Aura is a real-time voice AI interviewer built on LiveKit, Deepgram speech recognition, and text-to-speech. It runs interviews end to end and scores them with PydanticAI evaluators, while an anti-cheat trust monitor watches the session and full observability records every turn of the conversation.",
       "github": null,
       "live": null,
       "year": null
@@ -13,6 +14,7 @@
       "slug": "pi-dark-factory",
       "name": "pi-dark-factory",
       "tagline": "Autonomous software factory: PRD → backlog → unattended builds, deterministic verify gates, 5 cloud drivers, merge queue, ~35K LOC",
+      "about": "pi-dark-factory is an autonomous software factory that turns a PRD into merged pull requests with nobody at the keyboard. It slices a brief into a dependency-ordered backlog, builds each issue unattended behind deterministic verify gates, runs on five cloud machine drivers, and lands everything through a merge queue — roughly 35K lines of code running the loop.",
       "github": "https://github.com/techafreshh/pi-dark-factory",
       "live": null,
       "year": null
@@ -21,6 +23,7 @@
       "slug": "redline",
       "name": "redline",
       "tagline": "IAM attack-path finder; paths computed never generated, self-verifying remediation on shadow graph",
+      "about": "redline finds attack paths in IAM configurations. Paths are computed from the real permission graph, never generated or guessed, and every proposed remediation is self-verified against a shadow graph before it reaches you — so the fix you get is one that has already been proven safe.",
       "github": "https://github.com/techafreshh/redline",
       "live": null,
       "year": null
@@ -29,6 +32,7 @@
       "slug": "digital-products-factory",
       "name": "digital-products-factory",
       "tagline": "End-to-end product automation: pain discovery → Sheets approval → multi-agent generation → QA gates → delivery",
+      "about": "digital-products-factory automates a product business end to end. It starts from real pain discovered in the market, routes the go-ahead through a Sheets approval step, generates the product with a multi-agent pipeline, puts it through QA gates, and delivers the result.",
       "github": null,
       "live": null,
       "year": null
@@ -37,6 +41,7 @@
       "slug": "argus",
       "name": "argus",
       "tagline": "Autonomous orbital analyst: plan → acquire → analyze → verify → alert; single-source alerts structurally impossible",
+      "about": "Argus is an autonomous orbital analyst that watches the Earth around the clock. It plans its own observations, acquires and analyzes the data, and verifies its conclusions before anything reaches a human — every alert traces back to raw imagery, and the pipeline is built so no single source can fabricate one on its own.",
       "github": "https://github.com/techafreshh/argus",
       "live": null,
       "year": null
@@ -45,6 +50,7 @@
       "slug": "decision-cortex",
       "name": "decision-cortex",
       "tagline": "Company brain over 2,309 Rust RFCs; per-sentence citations, faithfulness scoring, abstention receipts",
+      "about": "decision-cortex is a company brain built over 2,309 Rust RFCs. Answers carry per-sentence citations so every claim points at its source, faithfulness scoring checks the model against what the corpus actually says, and abstention receipts are issued when the honest answer is \"the RFCs don't cover this\" — instead of a confident guess.",
       "github": "https://github.com/techafreshh/decision-cortex",
       "live": null,
       "year": null
@@ -53,6 +59,7 @@
       "slug": "engram",
       "name": "engram",
       "tagline": "MCP memory server on FalkorDB; bi-temporal facts, sleep-cycle consolidation, contradiction cards",
+      "about": "engram is an MCP memory server backed by FalkorDB. Facts are stored bi-temporally — what was true, and when it was known to be true — sleep-cycle consolidation keeps the memory tidy over time, and contradiction cards surface whenever new information conflicts with what the server already believes.",
       "github": "https://github.com/techafreshh/engram",
       "live": null,
       "year": null
@@ -61,6 +68,7 @@
       "slug": "website-factory",
       "name": "website-factory",
       "tagline": "Dead-site leads → multi-agent site generation → QA → deploy → cold outreach; commercial automation loop",
+      "about": "website-factory is a commercial automation loop built on dead sites. It finds sites that have gone stale, generates a replacement through a multi-agent pipeline, puts it through QA, deploys it, and opens cold outreach — turning neglected properties into working leads.",
       "github": null,
       "live": null,
       "year": null
@@ -69,6 +77,7 @@
       "slug": "bi-ai-ui",
       "name": "bi-ai-ui",
       "tagline": "Generative-UI BI chat; 5-node LangGraph, catalog-constrained canvas, paraphrase eval",
+      "about": "bi-ai-ui is a generative-UI BI chat where questions become interface, not just text. A five-node LangGraph pipeline plans each answer, the canvas is constrained to a real data catalog so every chart is grounded, and paraphrase evaluations check that the same question gets the same trustworthy answer.",
       "github": "https://github.com/techafreshh/bi-ai-ui",
       "live": null,
       "year": null
@@ -77,6 +86,7 @@
       "slug": "scribe",
       "name": "scribe",
       "tagline": "AI writing assistant for authors; React + Go monorepo, domain guardrails, scripture index",
+      "about": "scribe is an AI writing assistant built for authors, not for prompts — a React and Go monorepo shaped around how books are actually written. Domain guardrails keep its suggestions inside the craft, and a scripture index grounds the parts of a manuscript that quote scripture.",
       "github": null,
       "live": null,
       "year": null
@@ -85,6 +95,7 @@
       "slug": "room-brain",
       "name": "room-brain",
       "tagline": "Team chat → long-term memory agent; injection guards, approval gate with dry-run",
+      "about": "room-brain gives a team chat a long-term memory. It learns from the room over time, guards against prompt injection, and only acts through an approval gate with a dry-run mode — so what it remembers is useful and what it does is reviewable before it happens.",
       "github": "https://github.com/techafreshh/room-brain",
       "live": null,
       "year": null
@@ -93,6 +104,7 @@
       "slug": "longform",
       "name": "longform",
       "tagline": "Longform video factory: research → script → scenes → voice → assembler → YouTube upload",
+      "about": "longform is a factory for long-form video. Research becomes a script, the script becomes scenes, scenes get voiced, and an assembler stitches the pieces into a finished cut ready for YouTube upload.",
       "github": null,
       "live": null,
       "year": null
@@ -101,6 +113,7 @@
       "slug": "gatekeep",
       "name": "gatekeep",
       "tagline": "Multi-tenant RAG gateway; injection/homoglyph sanitization, caller-owned citations",
+      "about": "gatekeep is a multi-tenant RAG gateway. Requests are sanitized for prompt injection and homoglyph tricks before they ever reach an index, and citations stay caller-owned — answers come back tied to sources the caller controls, not sources the gateway made up.",
       "github": "https://github.com/techafreshh/gatekeep",
       "live": null,
       "year": null
@@ -109,6 +122,7 @@
       "slug": "reins",
       "name": "reins",
       "tagline": "Agent governance: ASK/SMART/AUTO trust levels, kill switch, rule learning",
+      "about": "reins is governance for agents. Every action runs through ASK, SMART, or AUTO trust levels, a kill switch stops everything in one move, and the rule layer learns from each review — so an agent's autonomy can grow without its supervision getting looser.",
       "github": "https://github.com/techafreshh/reins",
       "live": null,
       "year": null
@@ -117,6 +131,7 @@
       "slug": "kintsugi",
       "name": "kintsugi",
       "tagline": "n8n self-repair; LLM can only make outcomes more conservative",
+      "about": "kintsugi self-repairs broken n8n workflows, with one rule that makes automated repair safe: the LLM can only make an outcome more conservative. It can tighten what a workflow does, never widen it — so a repair can't quietly turn a bug into a bigger permission.",
       "github": "https://github.com/techafreshh/kintsugi",
       "live": null,
       "year": null
@@ -125,6 +140,7 @@
       "slug": "magpie",
       "name": "magpie",
       "tagline": "Scam-message radar; in-browser embeddings, only opaque vectors leave device",
+      "about": "magpie is a scam-message radar that runs entirely in your browser. Messages are embedded locally, and only opaque vectors — never the messages themselves — leave the device, so checking whether a text is a scam doesn't mean handing the text to a server.",
       "github": "https://github.com/techafreshh/magpie",
       "live": null,
       "year": null
@@ -133,6 +149,7 @@
       "slug": "financial-assistant",
       "name": "financial-assistant",
       "tagline": "Code-Act pandas agent + 12-kind generative-UI contract",
+      "about": "financial-assistant is a Code-Act pandas agent behind a twelve-kind generative-UI contract. It computes with real dataframes instead of hallucinated numbers, and every answer renders through a fixed set of UI kinds so the interface stays predictable no matter what the model tries to do.",
       "github": null,
       "live": null,
       "year": null
@@ -141,6 +158,7 @@
       "slug": "yt-clipping",
       "name": "yt-clipping",
       "tagline": "Transcript → highlights → 9:16 vertical clips with word-level captions",
+      "about": "yt-clipping turns long transcripts into shareable moments. It finds the highlights, cuts them into 9:16 vertical clips, and burns word-level captions onto every one — so a clip is ready to post the moment it's cut.",
       "github": "https://github.com/techafreshh/yt-clipping",
       "live": null,
       "year": null
@@ -149,6 +167,7 @@
       "slug": "arc-rag",
       "name": "arc-rag",
       "tagline": "ArcGIS docs RAG; thin-index + live-fetch architecture",
+      "about": "arc-rag is retrieval for the ArcGIS documentation, built on a thin-index plus live-fetch architecture. The index stays small and cheap to maintain, while answers are grounded by reading the actual documentation pages at question time — freshness comes from the fetch, not from a giant index.",
       "github": "https://github.com/techafreshh/arc-rag",
       "live": null,
       "year": null
@@ -157,6 +176,7 @@
       "slug": "repo-reader",
       "name": "repo-reader",
       "tagline": "Agentic codebase chat with model-request budget",
+      "about": "repo-reader is agentic chat for a codebase. It explores the repository the way an engineer would — following imports, reading files, building context — and a model-request budget keeps every conversation bounded, so answers stay thorough without the token spend running away.",
       "github": "https://github.com/techafreshh/repo-reader",
       "live": null,
       "year": null
@@ -165,6 +185,7 @@
       "slug": "scrapline",
       "name": "scrapline",
       "tagline": "Deterministic shooter + real SB3 PPO RL environment",
+      "about": "scrapline is a deterministic shooter wrapped around a real reinforcement-learning environment. The game side is fully reproducible so training runs are comparable, and the SB3 PPO agent learns to play it for real — not against a mock.",
       "github": "https://github.com/techafreshh/scrapline",
       "live": null,
       "year": null
@@ -173,6 +194,7 @@
       "slug": "techa-dl-bot",
       "name": "techa_dl_bot",
       "tagline": "Telegram downloader with Local Bot API + async queue",
+      "about": "techa_dl_bot is a Telegram downloader bot. It runs on the Local Bot API with an async queue underneath, so downloads stay responsive and correctly ordered even when several arrive at once.",
       "github": "https://github.com/techafreshh/techa_dl_bot",
       "live": null,
       "year": null
